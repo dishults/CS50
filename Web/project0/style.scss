@@ -1,9 +1,7 @@
-$color: antiquewhite;
-$padding-top: 30px;
+$font: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
-#intro {
-    text-align: center;
-    padding: $padding-top;
+#welcome {
+    font-family: $font;
 }
 
 img {
@@ -14,18 +12,20 @@ ul {
     padding-top: 10px;
 }
 
-@media print {
-    nav {
-        display: none;
+h1 + p {
+    font-family: $font;
+    font-size: large;
+}
+
+@media (max-width: 600px) {
+    body {
+        img { display: none; }
+        p { display: none; }
     }
 }
 
 .media {
     padding: 50px;    
-}
-
-.bold {
-    font-weight: bold;
 }
 
 .col-lg-6 {
@@ -36,4 +36,24 @@ ul {
 
 .progress {
     width: 100%;
+}
+
+%highlight {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.python {
+    @extend %highlight;
+    color: red;
+}
+
+.evaluation {
+    @extend %highlight;
+    color: green;
+}
+
+.startup {
+    @extend %highlight;
+    color: blue;
 }

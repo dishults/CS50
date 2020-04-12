@@ -1,6 +1,5 @@
-#intro {
-  text-align: center;
-  padding: 30px;
+#welcome {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 img {
@@ -11,17 +10,21 @@ ul {
   padding-top: 10px;
 }
 
-@media print {
-  nav {
+h1 + p {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+}
+
+@media (max-width: 600px) {
+  body img {
+    display: none;
+  }
+  body p {
     display: none;
   }
 }
 .media {
   padding: 50px;
-}
-
-.bold {
-  font-weight: bold;
 }
 
 .col-lg-6 {
@@ -32,6 +35,23 @@ ul {
 
 .progress {
   width: 100%;
+}
+
+.startup, .evaluation, .python {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.python {
+  color: red;
+}
+
+.evaluation {
+  color: green;
+}
+
+.startup {
+  color: blue;
 }
 
 /*# sourceMappingURL=style.css.map */

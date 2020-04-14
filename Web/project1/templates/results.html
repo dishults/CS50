@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block body %}
+<a href="{{ url_for('logout') }}"><button class='btn btn-primary float-right'>Logout</button></a>
+    <h1>Possible matching results</h1>
+    <ul class="list-group">
+        {% if option == 'isbn' %}
+            {% for res in results %}
+            <li class="list-group-item">
+                <a href="{{ url_for('info', isbn=res.isbn) }}">
+                    {{ res.isbn }}
+                </a>
+            </li>
+            {% endfor %}
+        {% elif option == 'title' %}
+            {% for res in results %}
+            <li class="list-group-item">
+                <a href="{{ url_for('info', isbn=res.isbn) }}">
+                    {{ res.title }}
+                </a>
+            </li>
+            {% endfor %}
+        {% elif option == 'author' %}
+            {% for res in results %}
+            <li class="list-group-item">
+                <a href="{{ url_for('info', isbn=res.isbn) }}">
+                    {{ res.author }}
+                </a>
+            </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+{% endblock %}

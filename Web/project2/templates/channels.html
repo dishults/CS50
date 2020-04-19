@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Channels
+{% endblock %}
+
+{% block body %}
+    <form action="{{ url_for('channels') }}" method="post">
+
+        <div class="form-row align-items-center">
+        <div class="col-auto">
+            <input type="text" class="form-control mb-2" id="inlineFormInput" name="channelname" placeholder="channel name">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-2">Add a channel</button>
+        </div>        
+        </div>
+
+    </form>
+
+    {% for channel in channels %}
+        <ul>
+            <li class="list-group-item">
+                <a href="{{ url_for('channel', name=channel) }}">
+                    {{ channel }}
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ channel }}
+{% endblock %}
+
+{% block body %}
+
+    {% for message in messages %}
+        <ul>
+            <li class="list-group-item"> {{ message }} </li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,57 @@
+#welcome {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+img {
+  max-width: 35%;
+}
+
+ul {
+  padding-top: 10px;
+}
+
+h1 + p {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+}
+
+@media (max-width: 600px) {
+  body img {
+    display: none;
+  }
+  body p {
+    display: none;
+  }
+}
+.media {
+  padding: 50px;
+}
+
+.col-lg-6 {
+  padding-top: 50px;
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+.progress {
+  width: 100%;
+}
+
+.startup, .evaluation, .python {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.python {
+  color: red;
+}
+
+.evaluation {
+  color: green;
+}
+
+.startup {
+  color: blue;
+}
+
+/*# sourceMappingURL=style.css.map */

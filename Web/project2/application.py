@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 app.secret_key = os.getenv("SECRET_KEY")
 
 all_channels = set()
-messages = {"hey": ["what's up", "how are you?", "hi, everyone"]}
+messages = {}
 
 @app.route("/")
 def index():
@@ -26,7 +26,7 @@ def index():
 def login():
     username = request.form.get('username')
     session['username'] = username
-    return redirect(url_for('channels'))
+    return redirect(url_for('channels', method='get'))
 
 @app.route("/channels", methods=['GET', 'POST'])
 def channels():
@@ -37,11 +37,27 @@ def channels():
 
 @app.route("/channels/<string:name>")
 def channel(name):
-    messages[name] = messages[name][-100:]
-    return render_template("channel.html", channel=name, messages=messages[name])
+    # If channel has messages
+
+    if name in messages:
+        messages[name] = messages[name][-100:]
+        return render_template("channel.html", channel=name, messages=messages[name])
+    return render_template("channel.html", channel=name)
 
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
     return redirect(url_for('index'))
+
+@socketio.on("send message")
+def vote(data):
+    channel = data["channel_name"]
+    msgs = data["message"]
+
+    if channel not in messages:
+        messages[channel] = [(msgs)]
+    else:
+        messages[channel].append(msgs)
+
+    emit("all messages", data, broadcast=True)

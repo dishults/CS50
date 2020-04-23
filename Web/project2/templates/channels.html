@@ -4,12 +4,32 @@
     Channels
 {% endblock %}
 
+{% block script %}
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                
+                document.querySelector('form').onsubmit = () => {
+                
+                    var channels = '{{ channels }}';
+                    var input = document.querySelector('input').value;
+                    if (channels.includes(input)) {
+                    
+                        alert(`Channel "${input}" already exists!`);
+                        document.querySelector('input').value = '';
+                        // Stop form from submitting
+                        return false;
+                    };
+                }
+            });
+        </script>
+{% endblock %}
+
 {% block body %}
     <form action="{{ url_for('channels') }}" method="post">
 
         <div class="form-row align-items-center">
         <div class="col-auto">
-            <input type="text" class="form-control mb-2" id="inlineFormInput" name="channelname" placeholder="channel name">
+            <input type="text" autofocus class="form-control mb-2" id="inlineFormInput" name="channelname" placeholder="channel name">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-2">Add a channel</button>

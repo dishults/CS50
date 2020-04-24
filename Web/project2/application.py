@@ -26,19 +26,15 @@ def index():
 def login():
     username = request.form.get('username')
     session['username'] = username
-    return redirect(url_for('channels', method='get'))
+    return redirect(url_for('channels'))
 
-@app.route("/channels", methods=['GET', 'POST'])
+@app.route("/channels")
 def channels():
-    if request.method == 'POST':
-        channel = request.form.get('channelname')
-        all_channels.add(channel)
     return render_template("channels.html", channels=all_channels)
 
 @app.route("/channels/<string:name>")
 def channel(name):
     # If channel has messages
-
     if name in messages:
         messages[name] = messages[name][-100:]
         return render_template("channel.html", channel=name, messages=messages[name])
@@ -50,8 +46,14 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@socketio.on("add channel")
+def chnl(data):
+    channel = data["new_channel"]
+    all_channels.add(channel)
+    emit("all channels", data, broadcast=True)
+
 @socketio.on("send message")
-def vote(data):
+def msg(data):
     channel = data["channel_name"]
     msgs = data["message"]
 

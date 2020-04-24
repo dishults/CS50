@@ -5,47 +5,75 @@
 {% endblock %}
 
 {% block script %}
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                
-                document.querySelector('form').onsubmit = () => {
-                
-                    var channels = '{{ channels }}';
-                    var input = document.querySelector('input').value;
-                    if (channels.includes(input)) {
-                    
-                        alert(`Channel "${input}" already exists!`);
-                        document.querySelector('input').value = '';
-                        // Stop form from submitting
-                        return false;
-                    };
-                }
-            });
-        </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // To prevent submitting empty channel name
+    document.querySelector('button').disabled = true;
+
+    document.querySelector('input').onkeyup = () => {
+        if (document.querySelector('input').value.length > 0)
+            document.querySelector('button').disabled = false;
+        else
+            document.querySelector('button').disabled = true;
+        }
+    
+    // Connect to websocket
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    
+    var channels = ['{{ channels }}'];
+
+    // When connected, configure buttons
+    socket.on('connect', () => {
+
+        // Add channel should emit an "add channel" event
+        document.querySelector('button').onclick = () => {
+            
+            var new_channel = document.querySelector('input').value;
+            document.querySelector('button').disabled = true;
+            document.querySelector('input').value = '';
+
+            if (channels.includes(new_channel)) {        
+                alert(`Channel "${new_channel}" already exists!`);
+                // Stop form from submitting
+                return false;
+            };
+
+            socket.emit('add channel', {'new_channel': new_channel});
+        }
+    });
+
+    // When a new message is announced, add to the unordered list
+    socket.on('all channels', data => {
+        var chnls = document.getElementById('chnls');
+        const chnl = data.new_channel;
+        chnls.innerHTML += `<li class="list-group-item"><a href="/channels/${chnl}">` + chnl + '</a></li>';
+        channels.push(chnl);
+    });
+});
+</script>
 {% endblock %}
 
 {% block body %}
-    <form action="{{ url_for('channels') }}" method="post">
 
-        <div class="form-row align-items-center">
+    <div class="form-row align-items-center">
         <div class="col-auto">
             <input type="text" autofocus class="form-control mb-2" id="inlineFormInput" name="channelname" placeholder="channel name">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-2">Add a channel</button>
         </div>        
-        </div>
+    </div>
 
-    </form>
-
-    {% for channel in channels %}
-        <ul>
+    <ul id="chnls" class="list-group list-group-flush">
+        {% for channel in channels %}
             <li class="list-group-item">
                 <a href="{{ url_for('channel', name=channel) }}">
                     {{ channel }}
                 </a>
             </li>
-        </ul>
-    {% endfor %}
+        {% endfor %}
+    </ul>
 
 {% endblock %}

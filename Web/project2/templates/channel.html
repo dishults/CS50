@@ -9,6 +9,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+    // To prevent submitting empty channel name
+    document.querySelector('button').disabled = true;
+
+    document.querySelector('textarea').onkeyup = () => {
+        if (document.querySelector('textarea').value.length > 0)
+            document.querySelector('button').disabled = false;
+        else
+            document.querySelector('button').disabled = true;
+        }
+
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
     
@@ -18,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Send button should emit a "send message" event
         document.querySelector('button').onclick = () => {
             var message = document.querySelector('textarea').value;
+            document.querySelector('button').disabled = true;
+            document.querySelector('textarea').value = '';
             socket.emit('send message', {'channel_name': '{{ channel }}', 'message': message});
         }
 

@@ -1,4 +1,4 @@
-import os
+import os, time
 
 from flask import Flask, request, session
 from flask_socketio import SocketIO, emit
@@ -13,8 +13,7 @@ socketio = SocketIO(app)
 
 app.secret_key = os.getenv("SECRET_KEY")
 
-all_channels = set()
-messages = {}
+messages = {} #channel : [{message, user, time}]
 
 @app.route("/")
 def index():
@@ -24,21 +23,21 @@ def index():
 
 @app.route("/login", methods=['POST'])
 def login():
-    username = request.form.get('username')
-    session['username'] = username
+    session['username'] = request.form.get('username')
     return redirect(url_for('channels'))
 
 @app.route("/channels")
 def channels():
-    return render_template("channels.html", channels=all_channels)
+    return render_template("channels.html", channels=messages)
 
 @app.route("/channels/<string:name>")
 def channel(name):
-    # If channel has messages
-    if name in messages:
+    # if channel doesn't exist redirect to channels creation page
+    if name not in messages:
+        return redirect(url_for('channels'))
+    elif len(messages[name]) > 100:
         messages[name] = messages[name][-100:]
-        return render_template("channel.html", channel=name, messages=messages[name])
-    return render_template("channel.html", channel=name)
+    return render_template("channel.html", channel=name, messages=messages[name])
 
 @app.route('/logout')
 def logout():
@@ -49,17 +48,17 @@ def logout():
 @socketio.on("add channel")
 def chnl(data):
     channel = data["new_channel"]
-    all_channels.add(channel)
+    messages[channel] = []
     emit("all channels", data, broadcast=True)
 
 @socketio.on("send message")
 def msg(data):
     channel = data["channel_name"]
-    msgs = data["message"]
 
-    if channel not in messages:
-        messages[channel] = [(msgs)]
-    else:
-        messages[channel].append(msgs)
+    message = {"message" : data["message"],
+                "user" : session['username'],
+                "time" : time.strftime("%Y-%m-%d %H:%M:%S")}
 
-    emit("all messages", data, broadcast=True)
+    messages[channel].append(message)
+
+    emit("all messages", message, broadcast=True)

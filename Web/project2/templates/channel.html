@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // When a new message is announced, add to the unordered list
-    socket.on('all messages', data => {
+    socket.on('all messages', msg => {
         var msgs = document.getElementById('msgs');
-        msgs.innerHTML += '<li class="list-group-item">' + data.message + '</li>';
+        msgs.innerHTML += '<li class="list-group-item">' + msg.message + msg.user + msg.time + '</li>';
     });
 });
 </script>
@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 {% block body %}
 
     <ul id="msgs" class="list-group list-group-flush">
-        {% for message in messages %}
-            <li class="list-group-item"> {{ message }} </li>
+        {% for m in messages %}
+            <li class="list-group-item"> {{ m.message }} {{ m.user }} {{ m.time }}</li>
         {% endfor %}
     </ul>
 

@@ -18,7 +18,7 @@ messages = {} #channel : [{message, user, time}]
 @app.route("/")
 def index():
     if 'username' in session:
-        return redirect(url_for('channels'))
+        return render_template("last_page.html")
     return render_template("index.html")
 
 @app.route("/login", methods=['POST'])
@@ -55,9 +55,27 @@ def chnl(data):
 def msg(data):
     channel = data["channel_name"]
 
-    message = {"message" : data["message"],
+    msg = data["message"]
+    if msg.startswith('@') > 0:
+        if msg.startswith('@time'):
+            msg = time.strftime("It's currently %H:%M:%S")
+        elif msg.startswith('@date'):
+            msg = time.strftime("Today is %Y-%m-%d")
+        elif msg.startswith('@len'):
+            nb = len(messages[channel])
+            msg = f"There are currently {nb} message(s) in *{channel}* channel"
+        elif msg.startswith('@me'):
+            msg = f"Your username is {session['username']}"
+        elif msg.startswith('@channels'):
+            str1 = ""
+            for c in [ch for ch in messages]:
+                str1 += c + " "
+            msg = f"Available channels: {str1}"
+    
+    message = {"message" : msg,
                 "user" : session['username'],
                 "time" : time.strftime("%Y-%m-%d %H:%M:%S")}
+
 
     messages[channel].append(message)
 

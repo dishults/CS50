@@ -38,7 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a new message is announced, add to the unordered list
     socket.on('all messages', msg => {
         var msgs = document.getElementById('msgs');
-        msgs.innerHTML += '<li class="list-group-item">' + msg.message + msg.user + msg.time + '</li>';
+        msgs.innerHTML += '<li class="list-group-item">' 
+                            + msg.message 
+                            + '<p class="mb-1">'
+                                + '<span class="badge badge-primary" style="margin-right: .4em">' + msg.user + '</span>'
+                                + '<span class="badge badge-success badge-pill">' + msg.time + '</span>'
+                            + '</p>'
+                        + '</li>';
     });
 });
 </script>
@@ -48,7 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <ul id="msgs" class="list-group list-group-flush">
         {% for m in messages %}
-            <li class="list-group-item"> {{ m.message }} {{ m.user }} {{ m.time }}</li>
+            <li class="list-group-item"> 
+                {{ m.message }}
+                <p class="mb-1">
+                    <span class="badge badge-primary">{{ m.user }}</span>
+                    <span class="badge badge-success badge-pill">{{ m.time }}</span>
+                </p>
+            </li>
         {% endfor %}
     </ul>
 

@@ -1,0 +1,62 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Hello!
+{% endblock %}
+
+{% block body %}
+    <h1>Welcome!</h1>
+    <h3>Here is our menu</h3>
+
+    <h4>Regular Pizza</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in Regular_Pizza %}
+            <tr>
+                <th scope="col">{{ pizza.topping }}</th>
+                <td>{{ pizza.small }}</td>
+                <td>{{ pizza.large }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h4>Sicilian Pizza</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in Sicilian_Pizza %}
+            <tr>
+                <th scope="col">{{ pizza.item }}</th>
+                <td>{{ pizza.small }}</td>
+                <td>{{ pizza.large }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Toppings</h5>
+    <table class="table">
+        <tbody style="text-align: center;">
+            {% for topping in Toppings %}
+            <tr>
+                <td>{{ topping.topping }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

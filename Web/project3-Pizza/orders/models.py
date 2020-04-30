@@ -23,3 +23,11 @@ class Toppings(models.Model):
 
     def __str__(self):
         return f"{self.topping}"
+
+class Subs(models.Model):
+    sub = models.CharField(max_length=50)
+    small = models.FloatField()
+    large = models.FloatField()
+
+    def __str__(self):
+        return f"{self.sub} {self.small} {self.large}"

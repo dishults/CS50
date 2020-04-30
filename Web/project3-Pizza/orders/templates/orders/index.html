@@ -1,7 +1,7 @@
 {% extends "orders/base.html" %}
 
 {% block title %}
-    Hello!
+    Pizza
 {% endblock %}
 
 {% block body %}
@@ -54,6 +54,31 @@
             {% for topping in Toppings %}
             <tr>
                 <td>{{ topping.topping }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Subs</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in Subs %}
+            <tr>
+                <td>{{ sub.sub }}</td>
+                {% if sub.large == 0.5 %}
+                    <td>+0.50</td>
+                    <td>+0.50</td>
+                {% else %}
+                    <td>{{ sub.small }}</td>
+                    <td>{{ sub.large }}</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

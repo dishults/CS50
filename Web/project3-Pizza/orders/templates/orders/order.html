@@ -1,0 +1,60 @@
+{% extends "orders/base.html" %}
+
+{% block script %}
+<script>
+if("{{ extras }}") {    
+    document.addEventListener('DOMContentLoaded', () => {
+        if ("{{ name }}" === 'Sub') {
+            const sub_label = "Optionally chose your extras for +0.50$ each";
+            document.querySelector('label').innerHTML = sub_label;
+        } 
+        // When name is Regular Pizza or Sicilian Pizza
+        else {
+            place_order = document.getElementById('place_order');
+            place_order.disabled = true;
+            all_options = document.querySelector('select');
+            options_nb = parseInt("{{ options_num }}");
+    
+            all_options.addEventListener('click', function() {
+                if (all_options.selectedOptions.length === options_nb)
+                    place_order.disabled = false;
+                else
+                    place_order.disabled = true;
+            });
+        }
+    });
+}
+</script>
+{% endblock %}
+
+{% block title %}
+    Order
+{% endblock %}
+
+{% block body %}
+
+<h2>You want to order:</h2>
+<h4>{{ size }} {{ name }} with {{ option }} for {{ price }}$</h4>
+
+<form action="">
+    {% csrf_token %}
+    {% if extras %}    
+        <div class="form-group col-md-4">
+            <label>Now choose your {{ option }}</label>
+            <select multiple class="form-control" size="19">
+                {% for extra in extras %}
+                    {% if name == 'Sub' %}
+                        <option>{{ extra.sub }}</option>
+                    {% else %}
+                        <option>{{ extra.topping }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>        
+    {% endif %}
+    <div class="col-auto">
+        <button type="submit" id="place_order" class="btn btn-primary mb-2">Add to my order</button>
+    </div>
+</form>
+
+{% endblock %}

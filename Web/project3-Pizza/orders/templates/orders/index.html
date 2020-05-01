@@ -5,11 +5,12 @@
 {% endblock %}
 
 {% block body %}
+<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
     <h1>Welcome!</h1>
     <h3>Here is our menu</h3>
 
     <h4>Regular Pizza</h5>
-    <table class="table">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -20,16 +21,20 @@
         <tbody>
             {% for pizza in Regular_Pizza %}
             <tr>
-                <th scope="col">{{ pizza.topping }}</th>
-                <td>{{ pizza.small }}</td>
-                <td>{{ pizza.large }}</td>
+                <th scope="row">{{ pizza.topping }}</th>
+                <td><a href="{% url 'order' name='Regular Pizza' option=pizza.topping size='small' %}">
+                    {{ pizza.small|floatformat:2 }}
+                </a></td>
+                <td><a href="{% url 'order' name='Regular Pizza' option=pizza.topping size='large' %}">
+                    {{ pizza.large|floatformat:2 }}
+                </a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     
     <h4>Sicilian Pizza</h5>
-    <table class="table">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -40,16 +45,20 @@
         <tbody>
             {% for pizza in Sicilian_Pizza %}
             <tr>
-                <th scope="col">{{ pizza.item }}</th>
-                <td>{{ pizza.small }}</td>
-                <td>{{ pizza.large }}</td>
+                <th scope="row">{{ pizza.item }}</th>
+                <td><a href="{% url 'order' name='Sicilian Pizza' option=pizza.item size='small' %}">
+                    {{ pizza.small|floatformat:2 }}
+                </a></td>
+                <td><a href="{% url 'order' name='Sicilian Pizza' option=pizza.item size='large' %}">
+                    {{ pizza.large|floatformat:2 }}
+                </a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
     <h4>Toppings</h5>
-    <table class="table">
+    <table class="table table-sm">
         <tbody style="text-align: center;">
             {% for topping in Toppings %}
             <tr>
@@ -60,7 +69,7 @@
     </table>
 
     <h4>Subs</h5>
-    <table class="table">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -69,15 +78,19 @@
             </tr>
         </thead>
         <tbody>
-            {% for sub in Subs %}
+            {% for sub in Sub %}
             <tr>
-                <td>{{ sub.sub }}</td>
+                <th scope="row">{{ sub.sub }}</th>
                 {% if sub.large == 0.5 %}
                     <td>+0.50</td>
                     <td>+0.50</td>
                 {% else %}
-                    <td>{{ sub.small }}</td>
-                    <td>{{ sub.large }}</td>
+                    <td><a href="{% url 'order' name='Sub' option=sub.sub size='small' %}">
+                        {{ sub.small|floatformat:2 }}
+                    </a></td>
+                    <td><a href="{% url 'order' name='Sub' option=sub.sub size='large' %}">
+                        {{ sub.large|floatformat:2 }}
+                    </a></td>
                 {% endif %}
             </tr>
             {% endfor %}

@@ -4,16 +4,22 @@
 <script>
 function Register() {
     var checkBox = document.querySelector("#defaultCheck1");
+    let firstName = document.getElementById("firstName"),
+        lastName = document.getElementById("lastName"),
+        email = document.getElementById("email");
 
     if (checkBox.checked == true){
-        document.getElementById("firstName").style.display = "initial";
-        document.getElementById("lastName").style.display = "initial";
-        document.getElementById("email").style.display = "initial";
+        [firstName, lastName, email].forEach(function(element) {
+            element.style.display = "initial";
+            element.required = true;
+        });
+
     } else {
-        document.getElementById("firstName").style.display = "none";
-        document.getElementById("lastName").style.display = "none";
-        document.getElementById("email").style.display = "none";
-    };
+        [firstName, lastName, email].forEach(function(element) {
+            element.style.display = "none";
+            element.required = false;
+        });
+    }
 }
 </script>
 {% endblock %}
@@ -29,10 +35,10 @@ function Register() {
     {% csrf_token %}
     <div class="form-row align-items-center" id="inputFields">
         <div class="col-auto">
-            <input class="form-control mb-2" name="username" type="text" id="inlineFormInput" placeholder="Username">
+            <input class="form-control mb-2" name="username" type="text" id="inlineFormInput" placeholder="Username" required>
         </div>
         <div class="col-auto">
-            <input class="form-control mb-2" name="password" type="password" id="exampleInputPassword1" placeholder="Password">
+            <input class="form-control mb-2" name="password" type="password" id="exampleInputPassword1" placeholder="Password" required>
         </div>
 
         <!-- Initially hidden. Show up if clicked register -->

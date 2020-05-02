@@ -19,7 +19,7 @@ class Sicilian_Pizza(models.Model):
     def __str__(self):
         return f"{self.item} {self.small} {self.large}"
 
-class Toppings(models.Model):
+class Topping(models.Model):
     topping = models.CharField(max_length=50)
 
     def __str__(self):
@@ -33,27 +33,33 @@ class Sub(models.Model):
     def __str__(self):
         return f"{self.sub} {self.small} {self.large}"
 
-# Shopping cart models
+class Order(models.Model):
+    user = models.ForeignKey(User, to_field="username", on_delete=models.CASCADE)
 
-#class Pizza_Order(models.Model):
-#    username = models.ForeignKey(User, on_delete=models.CASCADE)
-#    pizza = models.CharField(max_length=15)
-#    size = models.CharField(max_length=5)
-#    topping1 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="topping1")
-#    topping2 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="topping2")
-#    topping3 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="topping3")
-#    topping4 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="topping4")
-#    topping5 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="topping5")
+    choice = models.CharField(max_length=50)
+    option = models.CharField(max_length=50)
+    size = models.CharField(max_length=50)
+    price = models.FloatField()
+    extra1 = models.CharField(max_length=50, blank=True)
+    extra2 = models.CharField(max_length=50, blank=True)
+    extra3 = models.CharField(max_length=50, blank=True)
+    extra4 = models.CharField(max_length=50, blank=True)
+    extra5 = models.CharField(max_length=50, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.price is None:
+            self.price = 0
+        super(Order, self).save(*args, **kwargs)
+
+#class Placed(models.Model):
+#    user = models.ForeignKey(User, to_field="username", on_delete=models.CASCADE)
 #
-#    users = models.ManyToManyField(User, blank=True, related_name="pizzas")
-#
-#class Sub_Order(models.Model):
-#    username = models.ForeignKey(User, on_delete=models.CASCADE)
-#    sub = models.CharField(max_length=15)
-#    extra1 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="extra1")
-#    extra2 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="extra2")
-#    extra3 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="extra3")
-#    extra4 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="extra4")
-#    extra5 = models.ForeignKey(Toppings, on_delete=models.CASCADE, related_name="extra5")
-#
-#    users = models.ManyToManyField(User, blank=True, related_name="subs")
+#    choice = models.CharField(max_length=50)
+#    option = models.CharField(max_length=50)
+#    size = models.CharField(max_length=50)
+#    price = models.FloatField()
+#    extra1 = models.CharField(max_length=50, blank=True)
+#    extra2 = models.CharField(max_length=50, blank=True)
+#    extra3 = models.CharField(max_length=50, blank=True)
+#    extra4 = models.CharField(max_length=50, blank=True)
+#    extra5 = models.CharField(max_length=50, blank=True)

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.db.models import Q
 
-from .models import Regular_Pizza, Sicilian_Pizza, Toppings, Sub
+from .models import Regular_Pizza, Sicilian_Pizza, Topping, Sub, Order
 
 # Create your views here.
 def index(request):
@@ -13,7 +13,7 @@ def index(request):
     context = {
         "Regular_Pizza": Regular_Pizza.objects.all(),
         "Sicilian_Pizza": Sicilian_Pizza.objects.all(),
-        "Toppings": Toppings.objects.all(),
+        "Topping": Topping.objects.all(),
         "Sub": Sub.objects.all()
     }
     return render(request, "orders/index.html", context)
@@ -58,7 +58,7 @@ def order(request, name, option, size):
                 new_order["options_num"] = 5
             else:
                 new_order["options_num"] = int(option[0])
-            new_order["extras"] = Toppings.objects.all()
+            new_order["extras"] = Topping.objects.all()
 
     elif name == 'Sicilian Pizza':
         if size == 'small':
@@ -70,7 +70,7 @@ def order(request, name, option, size):
                 new_order["options_num"] = 5
             else:
                 new_order["options_num"] = int(option[0])
-            new_order["extras"] = Toppings.objects.all()
+            new_order["extras"] = Topping.objects.all()
 
     elif name == 'Sub':
         if size == 'small':
@@ -84,3 +84,33 @@ def order(request, name, option, size):
             new_order["extras"] = Sub.objects.filter(sub__startswith='Extra')
 
     return render(request, "orders/order.html", new_order)
+
+def shoppint_cart(request):
+    username = request.user.username
+    o = Order.objects.create(user=User.objects.get(username=username),
+                            choice=request.POST["name"],
+                            option=request.POST["option"],
+                            size=request.POST["size"],
+                            price=float(request.POST["price"]))
+    if "extras" in request.POST:
+        extras = request.POST.getlist("extras")
+        o.extra1 = extras[0]
+        if len(extras) > 1:
+            o.extra2 = extras[1]
+            if len(extras) > 2:
+                o.extra3 = extras[2]
+                if len(extras) > 3:
+                    o.extra4 = extras[3]
+                    if len(extras) > 4:
+                        o.extra5 = extras[4]
+        if o.choice == 'Sub':
+            o.price += 0.5 * len(extras)
+        o.save()
+
+    return redirect('index')
+
+def checkout(request):
+    username = request.user.username
+    orders = Order.objects.filter(user=username)
+    
+    return render(request, "orders/checkout.html", { "orders" : orders })

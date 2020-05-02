@@ -1,0 +1,71 @@
+{% extends "orders/base.html" %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    remove_button = document.getElementsByName('remove');
+
+    remove_button.forEach(function(button){
+        button.onclick = () => {
+        if (confirm(`Are you sure you want to delete ${button.dataset.order}?`))
+            txt = "You pressed OK!";
+        else
+            txt = "You pressed Cancel!";
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block body %}
+<h1>Here is your order:</h1>
+<table class="table table-hover" id="checkout">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Option(s)</th>
+            <th scope="col">Size</th>
+            <th scope="col">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <th scope="row">{{ o.choice }} <button type="button" data-order="{{ o }}" class="badge badge-primary" name="remove">-</span></th>
+            <td>
+                {{ o.option }} 
+                {% if o.extra1 %}
+                    <small class="text-muted">
+                        With extra: 
+                        <ul>
+                            <li>{{ o.extra1 }}</li>     
+                            {% if o.extra2 %}
+                                <li>{{ o.extra2 }}</li> 
+                                {% if o.extra3 %}
+                                    <li>{{ o.extra3 }}</li> 
+                                    {% if o.extra4 %}
+                                        <li>{{ o.extra4 }}</li> 
+                                        {% if o.extra5 %}
+                                            <li>{{ o.extra5 }}</li> 
+                                        {% endif %}                            
+                                    {% endif %}                            
+                                {% endif %}                            
+                            {% endif %}                            
+                        </ul>
+                    </small>
+                {% endif %}
+            </td>
+            <td>{{ o.size }}</td>
+            <td>{{ o.price|floatformat:2 }}$</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="col-auto">
+    <button type="submit" id="make_purchase" class="btn btn-primary btn-lg float-right">Purchase</button>
+</div>
+{% endblock %}

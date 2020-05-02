@@ -6,6 +6,7 @@
 
 {% block body %}
 <a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
+<a href="{% url 'checkout' %}"><button class='btn btn-success float-right'>Checkout</button></a>
     <h1>Welcome!</h1>
     <h3>Here is our menu</h3>
 
@@ -57,10 +58,10 @@
         </tbody>
     </table>
 
-    <h4>Toppings</h5>
+    <h4>Topping</h5>
     <table class="table table-sm">
         <tbody style="text-align: center;">
-            {% for topping in Toppings %}
+            {% for topping in Topping %}
             <tr>
                 <td>{{ topping.topping }}</td>
             </tr>

@@ -24,6 +24,10 @@ if("{{ extras }}") {
         }
     });
 }
+
+function Add_to_cart_ok() {
+    alert('The meal has been added to your shopping cart')
+}
 </script>
 {% endblock %}
 
@@ -36,12 +40,12 @@ if("{{ extras }}") {
 <h2>You want to order:</h2>
 <h4>{{ size }} {{ name }} with {{ option }} for {{ price }}$</h4>
 
-<form action="">
+<form action="{% url 'shoppint_cart' %}" method="post">
     {% csrf_token %}
     {% if extras %}    
         <div class="form-group col-md-4">
             <label>Now choose your {{ option }}</label>
-            <select multiple class="form-control" size="19">
+            <select multiple class="form-control" name="extras" size="19">
                 {% for extra in extras %}
                     {% if name == 'Sub' %}
                         <option>{{ extra.sub }}</option>
@@ -53,8 +57,12 @@ if("{{ extras }}") {
         </div>        
     {% endif %}
     <div class="col-auto">
-        <button type="submit" id="place_order" class="btn btn-primary mb-2">Add to my order</button>
+        <button type="submit" id="place_order" class="btn btn-primary mb-2" onclick=Add_to_cart_ok()>Add to my order</button>
     </div>
+    <input type="hidden" name="size" value="{{ size }}">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="option" value="{{ option }}">
+    <input type="hidden" name="price" value="{{ price }}">
 </form>
 
 {% endblock %}

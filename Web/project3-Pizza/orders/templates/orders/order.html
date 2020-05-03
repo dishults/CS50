@@ -36,7 +36,7 @@ function Add_to_cart_ok() {
 {% endblock %}
 
 {% block body %}
-
+<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
 <h2>You want to order:</h2>
 <h4>{{ size }} {{ name }} with {{ option }} for {{ price }}$</h4>
 

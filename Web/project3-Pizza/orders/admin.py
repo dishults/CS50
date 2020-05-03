@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Regular_Pizza, Sicilian_Pizza, Topping, Sub, Order
+from .models import Regular_Pizza, Sicilian_Pizza, Topping, Sub, Pending, Placed
 
 class Regular_Pizza_Admin(admin.ModelAdmin):
     list_display = ('topping', 'small', 'large')
@@ -21,4 +21,5 @@ admin.site.register(Regular_Pizza, Regular_Pizza_Admin)
 admin.site.register(Sicilian_Pizza, Sicilian_Pizza_Admin)
 admin.site.register(Topping)
 admin.site.register(Sub, Sub_Admin)
-admin.site.register(Order, Order_Admin)
+admin.site.register(Pending, Order_Admin)
+admin.site.register(Placed, Order_Admin)

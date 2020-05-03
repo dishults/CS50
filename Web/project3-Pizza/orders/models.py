@@ -46,20 +46,17 @@ class Order(models.Model):
     extra4 = models.CharField(max_length=50, blank=True)
     extra5 = models.CharField(max_length=50, blank=True)
 
-    def save(self, *args, **kwargs):
-        if self.price is None:
-            self.price = 0
-        super(Order, self).save(*args, **kwargs)
+    class Meta:
+        abstract = True
 
-#class Placed(models.Model):
-#    user = models.ForeignKey(User, to_field="username", on_delete=models.CASCADE)
-#
-#    choice = models.CharField(max_length=50)
-#    option = models.CharField(max_length=50)
-#    size = models.CharField(max_length=50)
-#    price = models.FloatField()
-#    extra1 = models.CharField(max_length=50, blank=True)
-#    extra2 = models.CharField(max_length=50, blank=True)
-#    extra3 = models.CharField(max_length=50, blank=True)
-#    extra4 = models.CharField(max_length=50, blank=True)
-#    extra5 = models.CharField(max_length=50, blank=True)
+    def __str__(self):
+        return (f"{self.user} - {self.choice} - {self.option} "
+                f"- {self.size} - {self.price}$\n"
+                f"{self.extra1} - {self.extra2} - {self.extra3} "
+                f"- {self.extra4} - {self.extra5}")
+
+class Pending(Order):
+    pass
+
+class Placed(Order):
+    pass

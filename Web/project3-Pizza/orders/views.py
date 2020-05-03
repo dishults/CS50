@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.db.models import Q
 
-from .models import Regular_Pizza, Sicilian_Pizza, Topping, Sub, Order
+from .models import Regular_Pizza, Sicilian_Pizza, Topping, Sub, Pending, Placed
 
 # Create your views here.
 def index(request):
@@ -87,7 +87,7 @@ def order(request, name, option, size):
 
 def shoppint_cart(request):
     username = request.user.username
-    o = Order.objects.create(user=User.objects.get(username=username),
+    o = Pending.objects.create(user=User.objects.get(username=username),
                             choice=request.POST["name"],
                             option=request.POST["option"],
                             size=request.POST["size"],
@@ -109,8 +109,31 @@ def shoppint_cart(request):
 
     return redirect('index')
 
+def delete(request, order_nb):
+    Pending.objects.get(pk=order_nb).delete()
+
+    return redirect('checkout')
+
 def checkout(request):
     username = request.user.username
-    orders = Order.objects.filter(user=username)
+    orders = Pending.objects.filter(user=username)
     
     return render(request, "orders/checkout.html", { "orders" : orders })
+
+def placed(request):
+    username = request.user.username
+    pending = Pending.objects.filter(user=username)
+    for p in pending:
+        Placed.objects.create(user=p.user,
+                                choice=p.choice,
+                                option=p.option,
+                                size=p.size,
+                                price=p.price,
+                                extra1=p.extra1,
+                                extra2=p.extra2,
+                                extra3=p.extra3,
+                                extra4=p.extra4,
+                                extra5=p.extra5)
+    pending.delete()
+
+    return redirect('index')

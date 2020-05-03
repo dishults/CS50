@@ -10,8 +10,10 @@
 {% endblock %}
 
 {% block body %}
-<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
-<a href="{% url 'index' %}"><button class='btn btn-success float-right'>Menu</button></a>
+<div class='float-right'>
+    <a href="{% url 'index' %}"><button class='btn btn-success'>Menu</button></a>
+    <a href="{% url 'logout' %}"><button class='btn btn-light'>Logout</button></a>
+</div>
 <h2>You want to order:</h2>
 <h4>{{ size }} {{ name }} with {{ option }} for {{ price }}$</h4>
 

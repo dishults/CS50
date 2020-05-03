@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 # Create your models here.
 
@@ -55,8 +56,14 @@ class Order(models.Model):
                 f"{self.extra1} - {self.extra2} - {self.extra3} "
                 f"- {self.extra4} - {self.extra5}")
 
+STATUS_CHOICES = [
+    ('r', mark_safe("<span style='color:red;'>Recieved</span>")),
+    ('p', mark_safe("<span style='color:orange;'>Prepaired</span>")),
+    ('w', mark_safe("<span style='color:green;'>Withdrawn</span>")),
+]
+
 class Pending(Order):
     pass
 
 class Placed(Order):
-    pass
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)

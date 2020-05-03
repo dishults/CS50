@@ -1,20 +1,13 @@
 {% extends "orders/base.html" %}
-{% load static %}
-
-{% block script %}
-<script src="{% static 'orders/checkout.js' %}"></script>
-{% endblock %}
 
 {% block title %}
-    Checkout
+    Status
 {% endblock %}
 
 {% block body %}
-<div class='float-right'>
-    <a href="{% url 'index' %}"><button class='btn btn-success'>Menu</button></a>
-    <a href="{% url 'logout' %}"><button class='btn btn-light'>Logout</button></a>
-</div>
-<h1>Here is your order:</h1>
+<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
+<a href="{% url 'index' %}"><button class='btn btn-success float-right'>Menu</button></a>
+<h1>Here is the status of your order(s):</h1>
 <table class="table table-hover" id="checkout">
     <thead>
         <tr>
@@ -22,12 +15,13 @@
             <th scope="col">Option(s)</th>
             <th scope="col">Size</th>
             <th scope="col">Price</th>
+            <th scope="col">Status</th>
         </tr>
     </thead>
     <tbody>
         {% for o in orders %}
         <tr>
-            <th scope="row">{{ o.choice }} <button class="badge badge-primary" type="button" data-order="{{ o.id }}" name="remove">-</span></th>
+            <th scope="row">{{ o.choice }}</th>
             <td>
                 {{ o.option }} 
                 {% if o.extra1 %}
@@ -53,21 +47,17 @@
             </td>
             <td>{{ o.size }}</td>
             <td class="price" data-price="{{ o.price }}">{{ o.price|floatformat:2 }}$</td>
+            <td>
+                {% if o.status == 'r' %}
+                    <span style='color:red;'>Recieved</span>
+                {% elif o.status == 'p' %}
+                    <span style='color:orange;'>Prepaired</span>
+                {% else %}
+                    <span style='color:green;'>Withdrawn</span>
+                {% endif %}                
+            </td>
         </tr>
         {% endfor %}
-        <tr class="table-active">
-            <th scope="row">Total</th>
-            <td></td>
-            <td></td>
-            <th id="total"></th>
-        </tr>
     </tbody>
 </table>
-<div class="col-auto">
-    <a href="{% url 'placed' %}">
-        <button class="btn btn-primary btn-lg float-right" type="submit" onclick=orderPlaced()>
-            Purchase
-        </button>
-    </a>
-</div>
 {% endblock %}

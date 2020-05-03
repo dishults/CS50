@@ -137,3 +137,9 @@ def placed(request):
     pending.delete()
 
     return redirect('index')
+
+def status(request):
+    username = request.user.username
+    orders = Placed.objects.filter(user=username)
+    
+    return render(request, "orders/status.html", { "orders" : orders })

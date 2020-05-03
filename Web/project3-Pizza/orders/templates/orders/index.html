@@ -5,8 +5,11 @@
 {% endblock %}
 
 {% block body %}
-<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
-<a href="{% url 'checkout' %}"><button class='btn btn-success float-right'>Checkout</button></a>
+<div class='float-right'>
+    <a href="{% url 'status' %}"><button class='btn btn-primary'>Status</button></a>
+    <a href="{% url 'checkout' %}"><button class='btn btn-success'>Checkout</button></a>
+    <a href="{% url 'logout' %}"><button class='btn btn-light'>Logout</button></a>
+</div>
     <h1>Welcome!</h1>
     <h3>Here is our menu</h3>
 

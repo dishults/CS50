@@ -1,0 +1,4 @@
+0. 3x3 - 9x9
+1. constants, board, dimensions, prototypes
+2. greet
+3. init, draw, move, won

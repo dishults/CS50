@@ -1,0 +1,46 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block script %}
+<script src="{% static 'orders/order.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    Order
+{% endblock %}
+
+{% block body %}
+<div class='float-right'>
+    <a href="{% url 'index' %}"><button class='btn btn-success'>Menu</button></a>
+    <a href="{% url 'logout' %}"><button class='btn btn-light'>Logout</button></a>
+</div>
+<h2>You want to order:</h2>
+<h4>{{ size }} {{ name }} with {{ option }} for {{ price }}$</h4>
+
+<form action="{% url 'shoppint_cart' %}" method="post">
+    {% csrf_token %}
+    {% if extras %}
+        <script>showExtras("{{ name }}", parseInt("{{ options_num }}"))</script>
+        <label>Now choose your {{ option }}</label>
+        <div class="form-group col-md-4">
+            <select multiple class="form-control" name="extras" size="19">
+                {% for extra in extras %}
+                    {% if name == 'Sub' %}
+                        <option>{{ extra.sub }}</option>
+                    {% else %}
+                        <option>{{ extra.topping }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>        
+    {% endif %}
+    <div class="col-auto">
+        <button type="submit" id="place_order" class="btn btn-primary mb-2" onclick=Add_to_cart_ok()>Add to my order</button>
+    </div>
+    <input type="hidden" name="size" value="{{ size }}">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="option" value="{{ option }}">
+    <input type="hidden" name="price" value="{{ price }}">
+</form>
+
+{% endblock %}

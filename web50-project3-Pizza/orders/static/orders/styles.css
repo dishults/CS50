@@ -1,0 +1,15 @@
+h4 {
+    padding-left: 50px;
+}
+
+#firstName, #lastName, #email {
+    display: none;
+}
+
+.table.table-sm {
+    max-width: 700px;
+}
+
+#checkout {
+    max-width: 900px;
+}

@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ channel }}
+{% endblock %}
+
+{% block script %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // To prevent submitting empty channel name
+    document.querySelector('button').disabled = true;
+
+    document.querySelector('textarea').onkeyup = () => {
+        if (document.querySelector('textarea').value.length > 0)
+            document.querySelector('button').disabled = false;
+        else
+            document.querySelector('button').disabled = true;
+        }
+
+    // Connect to websocket
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    
+    // When connected, configure buttons
+    socket.on('connect', () => {
+
+        // Send button should emit a "send message" event
+        document.querySelector('button').onclick = () => {
+            var message = document.querySelector('textarea').value;
+            document.querySelector('button').disabled = true;
+            document.querySelector('textarea').value = '';
+            socket.emit('send message', {'channel_name': '{{ channel }}', 'message': message});
+        }
+
+    });
+
+    // When a new message is announced, add to the unordered list
+    socket.on('all messages', msg => {
+        var msgs = document.getElementById('msgs');
+        msgs.innerHTML += '<li class="list-group-item">' 
+                            + msg.message 
+                            + '<p class="mb-1">'
+                                + '<span class="badge badge-primary" style="margin-right: .4em">' + msg.user + '</span>'
+                                + '<span class="badge badge-success badge-pill">' + msg.time + '</span>'
+                            + '</p>'
+                        + '</li>';
+    });
+});
+</script>
+{% endblock %}
+
+{% block body %}
+
+    <ul id="msgs" class="list-group list-group-flush">
+        {% for m in messages %}
+            <li class="list-group-item"> 
+                {{ m.message }}
+                <p class="mb-1">
+                    <span class="badge badge-primary">{{ m.user }}</span>
+                    <span class="badge badge-success badge-pill">{{ m.time }}</span>
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <div class="position-absolute fixed-bottom">
+
+        <div class="form-row align-items-center">        
+            <div class="form-group col-md-10" style="padding: 2% 4%;">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Type your message here"></textarea>
+            </div>
+            <div class="form-group col-md-2" style="padding: 2% 4%;">
+                <button type="submit" class="btn btn-primary btn-lg float-right" style="padding: 15px;">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

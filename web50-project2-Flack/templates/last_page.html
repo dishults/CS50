@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+    <script>
+    // Take user to the last page visited
+    var URL = localStorage.getItem('last_page');
+    localStorage.removeItem('last_page');
+    if (URL)
+        window.location.href = URL;
+    else
+        window.location.href = '/channels';
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

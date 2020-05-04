@@ -1,0 +1,48 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block script %}
+<script src="{% static 'orders/login.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<h1>Login</h1>
+{% if message %}
+    <div>
+        {{ message }}
+    </div>
+{% endif %}
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <div class="form-row align-items-center" id="inputFields">
+        <div class="col-auto">
+            <input class="form-control mb-2" name="username" type="text" id="inlineFormInput" placeholder="Username" required>
+        </div>
+        <div class="col-auto">
+            <input class="form-control mb-2" name="password" type="password" id="exampleInputPassword1" placeholder="Password" required>
+        </div>
+
+        <!-- Initially hidden. Show up if clicked register -->
+        <div class="col-auto">
+            <input class="form-control mb-2" name="first name" type="text" id="firstName" placeholder="first name">
+        </div>        
+        <div class="col-auto">
+            <input class="form-control mb-2" name="last name" type="text" id="lastName" placeholder="last name">
+        </div>
+        <div class="col-auto">
+            <input class="form-control mb-2" name="email" type="email" id="email" placeholder="email">
+        </div>
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" name="register" type="checkbox" value="ok" id="defaultCheck1" onclick="Register()">
+        <label class="form-check-label" for="defaultCheck1">
+            Register
+        </label>
+    </div>
+</form>
+{% endblock %}

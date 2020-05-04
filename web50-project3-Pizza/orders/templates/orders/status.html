@@ -1,0 +1,63 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Status
+{% endblock %}
+
+{% block body %}
+<a href="{% url 'logout' %}"><button class='btn btn-light float-right'>Logout</button></a>
+<a href="{% url 'index' %}"><button class='btn btn-success float-right'>Menu</button></a>
+<h1>Here is the status of your order(s):</h1>
+<table class="table table-hover" id="checkout">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Option(s)</th>
+            <th scope="col">Size</th>
+            <th scope="col">Price</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <th scope="row">{{ o.choice }}</th>
+            <td>
+                {{ o.option }} 
+                {% if o.extra1 %}
+                    <small class="text-muted">
+                        With extra: 
+                        <ul>
+                            <li>{{ o.extra1 }}</li>     
+                            {% if o.extra2 %}
+                                <li>{{ o.extra2 }}</li> 
+                                {% if o.extra3 %}
+                                    <li>{{ o.extra3 }}</li> 
+                                    {% if o.extra4 %}
+                                        <li>{{ o.extra4 }}</li> 
+                                        {% if o.extra5 %}
+                                            <li>{{ o.extra5 }}</li> 
+                                        {% endif %}                            
+                                    {% endif %}                            
+                                {% endif %}                            
+                            {% endif %}                            
+                        </ul>
+                    </small>
+                {% endif %}
+            </td>
+            <td>{{ o.size }}</td>
+            <td class="price" data-price="{{ o.price }}">{{ o.price|floatformat:2 }}$</td>
+            <td>
+                {% if o.status == 'r' %}
+                    <span style='color:red;'>Recieved</span>
+                {% elif o.status == 'p' %}
+                    <span style='color:orange;'>Prepaired</span>
+                {% else %}
+                    <span style='color:green;'>Withdrawn</span>
+                {% endif %}                
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

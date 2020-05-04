@@ -1,0 +1,104 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Pizza
+{% endblock %}
+
+{% block body %}
+<div class='float-right'>
+    <a href="{% url 'status' %}"><button class='btn btn-primary'>Status</button></a>
+    <a href="{% url 'checkout' %}"><button class='btn btn-success'>Checkout</button></a>
+    <a href="{% url 'logout' %}"><button class='btn btn-light'>Logout</button></a>
+</div>
+    <h1>Welcome!</h1>
+    <h3>Here is our menu</h3>
+
+    <h4>Regular Pizza</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in Regular_Pizza %}
+            <tr>
+                <th scope="row">{{ pizza.topping }}</th>
+                <td><a href="{% url 'order' name='Regular Pizza' option=pizza.topping size='small' %}">
+                    {{ pizza.small|floatformat:2 }}
+                </a></td>
+                <td><a href="{% url 'order' name='Regular Pizza' option=pizza.topping size='large' %}">
+                    {{ pizza.large|floatformat:2 }}
+                </a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h4>Sicilian Pizza</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in Sicilian_Pizza %}
+            <tr>
+                <th scope="row">{{ pizza.item }}</th>
+                <td><a href="{% url 'order' name='Sicilian Pizza' option=pizza.item size='small' %}">
+                    {{ pizza.small|floatformat:2 }}
+                </a></td>
+                <td><a href="{% url 'order' name='Sicilian Pizza' option=pizza.item size='large' %}">
+                    {{ pizza.large|floatformat:2 }}
+                </a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Topping</h5>
+    <table class="table table-sm">
+        <tbody style="text-align: center;">
+            {% for topping in Topping %}
+            <tr>
+                <td>{{ topping.topping }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Subs</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Small</th>
+                <th scope="col">Large</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in Sub %}
+            <tr>
+                <th scope="row">{{ sub.sub }}</th>
+                {% if sub.large == 0.5 %}
+                    <td>+0.50</td>
+                    <td>+0.50</td>
+                {% else %}
+                    <td><a href="{% url 'order' name='Sub' option=sub.sub size='small' %}">
+                        {{ sub.small|floatformat:2 }}
+                    </a></td>
+                    <td><a href="{% url 'order' name='Sub' option=sub.sub size='large' %}">
+                        {{ sub.large|floatformat:2 }}
+                    </a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
